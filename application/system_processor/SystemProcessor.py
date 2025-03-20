@@ -1,5 +1,6 @@
 import os
 from decoder.Cdl import Cdl
+from UniqueTrace import UniqueTrace
 
 class SystemProcessor:
 
@@ -33,9 +34,9 @@ class SystemProcessor:
         '''
         for traceUid in traceEvents:            
             if traceUid not in self.traceEvents:
-                self.traceEvents[traceUid] = []
+                self.traceEvents[traceUid] = UniqueTrace()
 
-            self.traceEvents[traceUid] += traceEvents[traceUid]
+            self.traceEvents[traceUid].addEvents(traceEvents[traceUid])
 
 
 if __name__ == "__main__":
