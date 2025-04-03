@@ -17,6 +17,7 @@ Note: There are limited commands available right now, see PR #13 for example com
 ![Simplified AQS System Diagram](docs/system_diagram2.jpg)
 
 # How does it work?
+The diagnostic data that ASP works with is the execution of the program and its variable values, so to gain system level diagnostic insight, the relationship between the programs has to be established. In this case, the relationship between the programs can be inferred using the variable values as a request moves through the system. For example, as a request moves through the system, it will have a unique identifier. While this information can be automaticaly inferred, for now, the ADLI tool allows the program to log a unique identifier when a trace starts and ends. 
 
 ## System Processor
 - The SystemProcessor class identifies all the log files which belong to the system (currently, they are in a known folder).
