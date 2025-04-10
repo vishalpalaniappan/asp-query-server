@@ -2,6 +2,7 @@ import os
 from Cdl import Cdl
 import json
 from pathlib import Path
+from database.TableWriter import TableWriter
 
 class SystemProcessor:
 
@@ -12,6 +13,7 @@ class SystemProcessor:
         self.logFolder = logFolder
         self.logFiles = []
         self.uniqueTraces = {}
+        self.database = TableWriter()
 
         self.parseSystemLogFiles()
 
@@ -24,21 +26,23 @@ class SystemProcessor:
         for logFileName in files:
             if logFileName.endswith(".clp.zst"):
                 cdlFile = Cdl(os.path.join(self.logFolder, logFileName))
-                self.addUniqueTraceEvents(cdlFile.getUniqueTraceEvents())
+                self.addUniqueTraceEvents(cdlFile)
+                self.database.write_file(cdlFile)
                 self.logFiles.append(cdlFile)
         
         # Sort the trace events by timestamp
         for uid in self.uniqueTraces:
-            self.uniqueTraces[uid].sort(key=lambda x: x["timestamp"], reverse=False)
+            self.uniqueTraces[uid].sort(key=lambda x: x["startTs"], reverse=False)
 
         # Save trace events to json file
         with open("traceEvents.json", "w+") as f:
             f.write(json.dumps(self.uniqueTraces))
 
-    def addUniqueTraceEvents(self, traceEvents):
+    def addUniqueTraceEvents(self, cdlFile):
         '''
             Add trace events from log files to system unique trace list.
         '''
+        traceEvents = cdlFile.getUniqueTraceEvents()
         for traceUid in traceEvents:            
             if traceUid not in self.uniqueTraces:
                 self.uniqueTraces[traceUid] = []

@@ -18,6 +18,8 @@ class CdlHeader:
         header = json.loads(headerJsonString)
 
         self.fileTree = header["fileTree"]
+        self.metadata = header["metadata"]
+        self.sysinfo = header["sysinfo"]
 
         for lt in header["ltMap"]:
             self.ltMap[int(lt)] = LogType(header["ltMap"][lt])
@@ -50,5 +52,18 @@ class CdlHeader:
                 return file
             
         return None
+    
+    def getMetadata(self):
+        '''
+            Returns the metadata for the current program.
+        '''
+        return self.metadata
+    
+    def getSysInfo(self):
+        '''
+            Returns the system information.
+        '''
+        return self.sysinfo
+    
 
 
